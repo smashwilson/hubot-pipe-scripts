@@ -1,2 +1,3 @@
-# hubot-pipe-scripts
-Utility scripts for use with hubot-pipe
+# hubot-pipe scripts
+
+Utility scripts for use with hubot-pipe.

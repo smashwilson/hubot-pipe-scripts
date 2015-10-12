@@ -1,0 +1,27 @@
+{
+  "name": "hubot-pipe-scripts",
+  "version": "0.0.1",
+  "description": "Utility scripts for hubot-pipe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smashwilson/hubot-pipe-scripts.git"
+  },
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "pipe"
+  ],
+  "author": "Ash Wilson <smashwilson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smashwilson/hubot-pipe-scripts/issues"
+  },
+  "homepage": "https://github.com/smashwilson/hubot-pipe-scripts",
+  "dependencies": {
+    "coffee-script": "^1.10.0"
+  }
+}
