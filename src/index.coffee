@@ -51,7 +51,7 @@ parseRegexp = (text) ->
 
 module.exports = (robot) ->
 
-  robot.respond /match (.*)/im, (resp) ->
+  robot.respond /match ([^]*)/im, (resp) ->
     [err, rx, left] = parseRegexp resp.match[1]
     if err?
       resp.send err.message
@@ -61,16 +61,18 @@ module.exports = (robot) ->
     return unless results?
     resp.send result for result in results
 
-  robot.respond /grep (.*)/im, (resp) ->
+  robot.respond /grep ([^]*)/im, (resp) ->
     [err, rx, left] = parseRegexp resp.match[1]
     if err?
       resp.send err.message
       return
 
+    left = left.replace /^\s*/, ""
+
     for line in left.split /\n/
       resp.send line if line.search(rx) isnt -1
 
-  robot.respond /s (.*)/im, (resp) ->
+  robot.respond /s ([^]*)/im, (resp) ->
     [err, rx, left] = parseRegexp resp.match[1]
     if err?
       resp.send err.message
@@ -86,10 +88,10 @@ module.exports = (robot) ->
     left = left.replace rx, replacement
     resp.send left
 
-  robot.respond /loud (.*)/im, (resp) ->
+  robot.respond /loud ([^]*)/im, (resp) ->
     resp.send resp.match[1].toUpperCase()
 
-  robot.respond /quiet (.*)/im, (resp) ->
+  robot.respond /quiet ([^]*)/im, (resp) ->
     resp.send resp.match[1].toLowerCase()
 
   # Fun fact: devnull doesn't even need to exist
