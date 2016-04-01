@@ -51,11 +51,20 @@ parseRegexp = (text) ->
 
 module.exports = (robot) ->
 
-  robot.respond /match ([^]*)/im, (resp) ->
-    [err, rx, left] = parseRegexp resp.match[1]
+  inputFrom = (msg) ->
+    if msg.match[1]? && msg.match[1].trim().length > 0
+      msg.match[1]
+    else
+      robot.mostRecent(msg) || ''
+
+  robot.respond /match\s*([^]*)/im, (resp) ->
+    [err, rx, left] = parseRegexp m
     if err?
       resp.send err.message
       return
+
+    unless left.trim().length > 0
+      left = robot.mostRecent(resp)
 
     results = left.match rx
     return unless results?
@@ -66,6 +75,9 @@ module.exports = (robot) ->
     if err?
       resp.send err.message
       return
+
+    unless left.trim().length > 0
+      left = robot.mostRecent(resp)
 
     left = left.replace /^\s*/, ""
 
@@ -83,15 +95,18 @@ module.exports = (robot) ->
       resp.send err.message
       return
 
+    unless left.trim().length > 0
+      left = robot.mostRecent(resp)
+
     left = left.replace /^\s*/, ""
 
     left = left.replace rx, replacement
     resp.send left
 
-  robot.respond /loud ([^]*)/im, (resp) ->
-    resp.send resp.match[1].toUpperCase()
+  robot.respond /loud\s*([^]*)/im, (resp) ->
+    resp.send inputFrom(resp).toUpperCase()
 
-  robot.respond /quiet ([^]*)/im, (resp) ->
-    resp.send resp.match[1].toLowerCase()
+  robot.respond /quiet\s*([^]*)/im, (resp) ->
+    resp.send inputFrom(resp).toLowerCase()
 
   # Fun fact: devnull doesn't even need to exist
