@@ -1,5 +1,7 @@
 # hubot-pipe scripts
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/smashwilson/hubot-pipe-scripts.svg)](https://greenkeeper.io/)
+
 Utility scripts for use with [hubot-pipe](https://github.com/smashwilson/hubot-pipe), like `grep` for text search, or `s` for simple regexp substitution. See [`src/index.coffee`](src/index.coffee) for the full list.
 
 ## Installing
