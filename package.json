@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/smashwilson/hubot-pipe-scripts/issues"
   },
-  "homepage": "https://github.com/smashwilson/hubot-pipe-scripts",
-  "dependencies": {
-    "coffee-script": "^1.10.0"
-  }
+  "homepage": "https://github.com/smashwilson/hubot-pipe-scripts"
 }
