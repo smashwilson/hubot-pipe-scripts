@@ -17,12 +17,16 @@ function parseDelimited(delimiter, text) {
 
   // Skip initial whitespace.
   let start = text.search(/\S/);
-  if (start === -1) { start = 0; }
+  if (start === -1) {
+    start = 0;
+  }
 
   // If the next character is the delimiter character, we'll read a delimited string. Otherwise,
   // we'll read until the next whitespace.
   const isDelimited = text[start] === delimiter;
-  if (isDelimited) { start += 1; }
+  if (isDelimited) {
+    start += 1;
+  }
 
   for (let i = start; i <= text.length; i++) {
     if (escaped) {
@@ -36,36 +40,38 @@ function parseDelimited(delimiter, text) {
       continue;
     }
 
-    if ((isDelimited && (letter === delimiter)) || (!isDelimited && letter.match(/\s/))) {
+    if (
+      (isDelimited && letter === delimiter) ||
+      (!isDelimited && letter.match(/\s/))
+    ) {
       const next = i + 1;
       return [null, text.slice(start, i), text.slice(next)];
     }
   }
 
   return [new Error(`Unterminated ${delimiter}`), null, null];
-};
+}
 
 function parseRegexp(text) {
   try {
     const [err, pattern, left] = parseDelimited("/", text);
-    const rx = new RegExp(pattern, 'gi');
+    const rx = new RegExp(pattern, "gi");
     return [err, rx, left];
   } catch (e) {
     return [e, null, null];
   }
-};
+}
 
-module.exports = function(robot) {
-
-  const inputFrom = msg => {
-    if ((msg.match[1] != null) && (msg.match[1].trim().length > 0)) {
+module.exports = function (robot) {
+  const inputFrom = (msg) => {
+    if (msg.match[1] != null && msg.match[1].trim().length > 0) {
       return msg.match[1];
     } else {
-      return robot.mostRecent(msg) || '';
+      return robot.mostRecent(msg) || "";
     }
   };
 
-  robot.respond(/match\s*([^]*)/im, function(resp) {
+  robot.respond(/match\s*([^]*)/im, function (resp) {
     let [err, rx, left] = parseRegexp(m);
     if (err != null) {
       resp.send(err.message);
@@ -77,11 +83,13 @@ module.exports = function(robot) {
     }
 
     const results = left.match(rx);
-    if (results == null) { return; }
+    if (results == null) {
+      return;
+    }
     return results.map((result) => resp.send(result));
   });
 
-  robot.respond(/grep ([^]*)/im, function(resp) {
+  robot.respond(/grep ([^]*)/im, function (resp) {
     let [err, rx, left] = parseRegexp(resp.match[1]);
     if (err != null) {
       resp.send(err.message);
@@ -101,7 +109,7 @@ module.exports = function(robot) {
     }
   });
 
-  robot.respond(/s ([^]*)/im, function(resp) {
+  robot.respond(/s ([^]*)/im, function (resp) {
     let replacement;
     let [err, rx, left] = parseRegexp(resp.match[1]);
     if (err != null) {
@@ -125,9 +133,13 @@ module.exports = function(robot) {
     return resp.send(left);
   });
 
-  robot.respond(/loud\s*([^]*)/im, resp => resp.send(inputFrom(resp).toUpperCase()));
+  robot.respond(/loud\s*([^]*)/im, (resp) =>
+    resp.send(inputFrom(resp).toUpperCase())
+  );
 
-  robot.respond(/quiet\s*([^]*)/im, resp => resp.send(inputFrom(resp).toLowerCase()));
+  robot.respond(/quiet\s*([^]*)/im, (resp) =>
+    resp.send(inputFrom(resp).toLowerCase())
+  );
 };
 
 // Fun fact: devnull doesn't even need to exist
