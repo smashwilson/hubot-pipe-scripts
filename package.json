@@ -4,6 +4,8 @@
   "description": "Utility scripts for hubot-pipe",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write *.js src/**/*.js",
+    "lint": "prettier --check *.js src/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,7 +23,7 @@
     "url": "https://github.com/smashwilson/hubot-pipe-scripts/issues"
   },
   "homepage": "https://github.com/smashwilson/hubot-pipe-scripts",
-  "dependencies": {
-    "coffee-script": "^1.10.0"
+  "devDependencies": {
+    "prettier": "^2.2.1"
   }
 }
