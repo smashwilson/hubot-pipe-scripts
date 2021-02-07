@@ -1,6 +1,6 @@
 {
   "name": "hubot-pipe-scripts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Utility scripts for hubot-pipe",
   "main": "index.js",
   "scripts": {
