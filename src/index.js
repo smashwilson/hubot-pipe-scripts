@@ -71,74 +71,76 @@ module.exports = function (robot) {
     }
   };
 
-  robot.respond(/match\s*([^]*)/im, function (resp) {
-    let [err, rx, left] = parseRegexp(m);
+  robot.respond(/match\s*([^]*)/im, function (msg) {
+    let [err, rx, left] = parseRegexp(msg.match[1]);
     if (err != null) {
-      resp.send(err.message);
+      msg.send(err.message);
       return;
     }
 
     if (left.trim().length === 0) {
-      left = robot.mostRecent(resp);
+      left = robot.mostRecent(msg);
     }
 
     const results = left.match(rx);
     if (results == null) {
       return;
     }
-    return results.map((result) => resp.send(result));
+    for (const result of results) {
+      msg.send(result);
+    }
   });
 
-  robot.respond(/grep ([^]*)/im, function (resp) {
-    let [err, rx, left] = parseRegexp(resp.match[1]);
+  robot.respond(/grep ([^]*)/im, function (msg) {
+    let [err, rx, left] = parseRegexp(msg.match[1]);
     if (err != null) {
-      resp.send(err.message);
+      msg.send(err.message);
       return;
     }
 
     if (left.trim().length === 0) {
-      left = robot.mostRecent(resp);
+      left = robot.mostRecent(msg);
     }
 
     left = left.replace(/^\s*/, "");
 
     for (const line of left.split(/\n/)) {
       if (line.search(rx) !== -1) {
-        resp.send(line);
+        msg.send(line);
       }
     }
   });
 
-  robot.respond(/s ([^]*)/im, function (resp) {
+  robot.respond(/s ([^]*)/im, function (msg) {
     let replacement;
-    let [err, rx, left] = parseRegexp(resp.match[1]);
+    let [err, rx, left] = parseRegexp(msg.match[1]);
     if (err != null) {
-      resp.send(err.message);
+      msg.send(err.message);
       return;
     }
 
     [err, replacement, left] = parseDelimited('"', left);
     if (err != null) {
-      resp.send(err.message);
+      msg.send(err.message);
       return;
     }
 
     if (left.trim().length === 0) {
-      left = robot.mostRecent(resp);
+      left = robot.mostRecent(msg);
     }
 
     left = left.replace(/^\s*/, "");
 
     left = left.replace(rx, replacement);
-    return resp.send(left);
+    msg.send(left);
   });
 
-  robot.respond(/loud\s*([^]*)/im, (resp) =>
-    resp.send(inputFrom(resp).toUpperCase())
+  robot.respond(/loud\s*([^]*)/im, (msg) =>
+    msg.send(inputFrom(msg).toUpperCase())
   );
 
-  robot.respond(/quiet\s*([^]*)/im, (resp) =>
-    resp.send(inputFrom(resp).toLowerCase())
+  robot.respond(/quiet\s*([^]*)/im, (msg) =>
+    msg.send(inputFrom(msg).toLowerCase())
   );
 };
 
